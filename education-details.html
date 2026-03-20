@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Content - Heritage Bharat</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3DB;</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: var(--bg-light);
+            padding-top: 80px;
+        }
+        
+        .edu-details-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .edu-hero {
+            background: linear-gradient(135deg, var(--teal), var(--teal-light));
+            border-radius: var(--radius-lg);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .edu-hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .edu-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .edu-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .edu-content-box {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 25px;
+        }
+        
+        .edu-content-box h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--teal);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--saffron);
+        }
+        
+        .edu-content-box h3 {
+            color: var(--text-dark);
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .edu-content-box p {
+            color: var(--text-medium);
+            line-height: 1.9;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .edu-content-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .edu-content-box ul li {
+            color: var(--text-medium);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .edu-content-box ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--saffron);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .highlight-box {
+            background: var(--bg-cream);
+            border-left: 4px solid var(--saffron);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 25px 0;
+        }
+        
+        .highlight-box h4 {
+            color: var(--teal);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--transition);
+        }
+        
+        .image-grid img:hover {
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 30px 0;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--saffron);
+        }
+        
+        .timeline-item {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--saffron);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--saffron);
+        }
+        
+        .timeline-item h4 {
+            color: var(--teal);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .edu-hero {
+                padding: 40px 25px;
+            }
+            .edu-hero h1 {
+                font-size: 1.8rem;
+            }
+            .edu-content-box {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html#education" class="btn btn-primary back-btn">
+        <i class="fas fa-arrow-left"></i> <span data-lang="common.backToEducation">Back to Education</span>
+    </a>
+
+    <!-- Language Dropdown -->
+    <div class="lang-dropdown" style="position: fixed; top: 20px; right: 20px; z-index: 1001;">
+        <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+            <i class="fas fa-globe"></i>
+            English
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="lang-menu" id="langMenu">
+            <div class="lang-option" onclick="changeLang('en')">
+                <span>English</span>
+                <i class="fas fa-check lang-check" id="check-en"></i>
+            </div>
+            <div class="lang-option" onclick="changeLang('hi')">
+                <span>हिंदी (Hindi)</span>
+                <i class="fas fa-check lang-check" id="check-hi"></i>
+            </div>
+            <div class="lang-option" onclick="changeLang('gu')">
+                <span>ગુજરાતી (Gujarati)</span>
+                <i class="fas fa-check lang-check" id="check-gu"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="edu-details-container">
+        <!-- Hero Section -->
+        <div class="edu-hero">
+            <div class="edu-hero-icon" id="topicIcon"></div>
+            <h1 id="topicTitle"></h1>
+            <p id="topicSubtitle"></p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="edu-content-box" id="mainContent">
+            <!-- Content will be loaded here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="lang.js"></script>
+    <script src="education-data.js"></script>
+    <script>
+        // Get topic ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const topicId = urlParams.get('topic');
+
+        // Load educational content
+        function loadContent() {
+            console.log('Loading content for topic:', topicId);
+            console.log('EDUCATION_CONTENT available:', typeof EDUCATION_CONTENT !== 'undefined');
+            
+            if (typeof EDUCATION_CONTENT !== 'undefined') {
+                console.log('Available topics:', Object.keys(EDUCATION_CONTENT));
+            }
+            
+            if (topicId && typeof EDUCATION_CONTENT !== 'undefined' && EDUCATION_CONTENT[topicId]) {
+                const content = EDUCATION_CONTENT[topicId];
+                console.log('Content found:', content.title);
+                
+                // Set page title
+                document.title = `${content.title} - Heritage Bharat`;
+                
+                // Populate hero section
+                const iconEl = document.getElementById('topicIcon');
+                const titleEl = document.getElementById('topicTitle');
+                const subtitleEl = document.getElementById('topicSubtitle');
+                const contentEl = document.getElementById('mainContent');
+                
+                if (iconEl) iconEl.textContent = content.icon;
+                if (titleEl) titleEl.textContent = content.title;
+                if (subtitleEl) subtitleEl.textContent = content.subtitle;
+                if (contentEl) contentEl.innerHTML = content.content;
+                
+            } else {
+                console.error('Content not found for topic:', topicId);
+                const errorMessage = `
+                    <div style="text-align: center; padding: 100px 20px;">
+                        <h1>Content not found</h1>
+                        <p>The educational content you're looking for doesn't exist.</p>
+                        <p><strong>Topic ID:</strong> ${topicId || 'Not provided'}</p>
+                        <p><strong>EDUCATION_CONTENT available:</strong> ${typeof EDUCATION_CONTENT !== 'undefined' ? 'Yes' : 'No'}</p>
+                        ${typeof EDUCATION_CONTENT !== 'undefined' ? `<p><strong>Available topics:</strong> ${Object.keys(EDUCATION_CONTENT).join(', ')}</p>` : ''}
+                        <a href="index.html#education" class="btn btn-primary">Go Back to Education Hub</a>
+                    </div>
+                `;
+                document.body.innerHTML = errorMessage;
+            }
+        }
+
+        // Load content when page is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadContent);
+        } else {
+            loadContent();
+        }
+    </script>
+</body>
+</html>

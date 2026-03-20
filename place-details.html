@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Details - Heritage Bharat</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3DB;</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles specific to details page */
+        body {
+            background: var(--bg-light);
+            padding-top: 80px;
+        }
+        
+        .details-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .details-hero {
+            position: relative;
+            height: 400px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .details-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .details-hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            padding: 40px 30px 30px;
+            color: white;
+        }
+        
+        .details-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .details-hero .meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .details-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .info-card {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--saffron);
+        }
+        
+        .info-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--teal);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+        
+        .info-card p {
+            color: var(--text-medium);
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--saffron);
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-img {
+            height: 200px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform var(--transition);
+        }
+        
+        .gallery-img:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .cost-disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin: 25px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .cost-disclaimer i {
+            color: #ff9800;
+            font-size: 1.3rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        
+        .cost-disclaimer p {
+            margin: 0;
+            color: #856404;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .cost-disclaimer strong {
+            color: #664d03;
+        }
+        
+        @media (max-width: 768px) {
+            .details-hero {
+                height: 300px;
+            }
+            .details-hero h1 {
+                font-size: 1.8rem;
+            }
+            .details-content {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="btn btn-primary back-btn">
+        <i class="fas fa-arrow-left"></i> <span data-lang="common.backToHome">Back to Home</span>
+    </a>
+
+    <!-- Language Dropdown -->
+    <div class="lang-dropdown" style="position: fixed; top: 20px; right: 20px; z-index: 1001;">
+        <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+            <i class="fas fa-globe"></i>
+            English
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="lang-menu" id="langMenu">
+            <div class="lang-option" onclick="changeLang('en')">
+                <span>English</span>
+                <i class="fas fa-check lang-check" id="check-en"></i>
+            </div>
+            <div class="lang-option" onclick="changeLang('hi')">
+                <span>हिंदी (Hindi)</span>
+                <i class="fas fa-check lang-check" id="check-hi"></i>
+            </div>
+            <div class="lang-option" onclick="changeLang('gu')">
+                <span>ગુજરાતી (Gujarati)</span>
+                <i class="fas fa-check lang-check" id="check-gu"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="details-container">
+        <!-- Hero Image Section -->
+        <div class="details-hero" id="heroSection">
+            <img id="heroImage" src="" alt="">
+            <div class="details-hero-overlay">
+                <h1 id="placeName"></h1>
+                <div class="meta">
+                    <span id="placeDistrict"></span>
+                    <span id="placeCategory"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="details-content">
+            <!-- Quick Info Grid -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3><i class="fas fa-clock"></i> <span data-lang="place.openingHours">Opening Hours</span></h3>
+                    <p id="openingHours"></p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-calendar-alt"></i> <span data-lang="place.bestTime">Best Time to Visit</span></h3>
+                    <p id="bestTime"></p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-wallet"></i> <span data-lang="place.budget">Average Budget</span></h3>
+                    <p id="budget"></p>
+                </div>
+            </div>
+
+            <!-- Budget and Timing Disclaimer Note -->
+            <div class="cost-disclaimer">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Note:</strong> Budget estimates and opening hours mentioned are approximate and may vary based on season, personal preferences, current market rates, and special occasions or holidays. Please verify timings before visiting.</p>
+            </div>
+
+            <!-- Full Address -->
+            <h2 class="section-title"><i class="fas fa-map-marker-alt"></i> <span data-lang="place.location">Location & Address</span></h2>
+            <div class="info-card" style="margin-bottom: 40px;">
+                <p id="fullAddress"></p>
+                <a id="mapLink" href="" target="_blank" class="btn btn-primary" style="margin-top: 15px; display: inline-flex;">
+                    <i class="fas fa-map"></i> <span data-lang="place.viewMaps">View on Google Maps</span>
+                </a>
+            </div>
+
+            <!-- History Section -->
+            <h2 class="section-title"><i class="fas fa-book"></i> <span data-lang="place.history">History & Significance</span></h2>
+            <p id="history" style="color: var(--text-medium); line-height: 1.8; margin-bottom: 40px;"></p>
+
+            <!-- Image Gallery -->
+            <h2 class="section-title"><i class="fas fa-images"></i> <span data-lang="place.gallery">Photo Gallery</span></h2>
+            <div class="image-gallery" id="imageGallery"></div>
+
+            <!-- Additional Info -->
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> <span data-lang="place.visitorInfo">Visitor Information</span></h2>
+            <div id="additionalInfo"></div>
+        </div>
+    </div>
+
+    <script src="lang.js"></script>
+    <script src="details-data.js"></script>
+    <script>
+        // Get place ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const placeId = parseInt(urlParams.get('id'));
+
+        // Load place details
+        if (placeId && PLACE_DETAILS[placeId]) {
+            const place = PLACE_DETAILS[placeId];
+            
+            // Set page title
+            document.title = `${place.name} - Heritage Bharat`;
+            
+            // Populate hero section
+            document.getElementById('heroImage').src = place.mainImage;
+            document.getElementById('heroImage').alt = place.name;
+            document.getElementById('placeName').textContent = `${place.emoji} ${place.name}`;
+            document.getElementById('placeDistrict').innerHTML = `<i class="fas fa-map-pin"></i> ${place.district}`;
+            document.getElementById('placeCategory').innerHTML = `<i class="fas fa-tag"></i> ${place.category}`;
+            
+            // Populate info cards
+            document.getElementById('openingHours').textContent = place.openingHours;
+            document.getElementById('bestTime').textContent = place.bestTime;
+            document.getElementById('budget').textContent = place.budget;
+            
+            // Populate address
+            document.getElementById('fullAddress').innerHTML = `<strong>${place.name}</strong><br>${place.fullAddress}`;
+            document.getElementById('mapLink').href = place.mapLink;
+            
+            // Populate history
+            document.getElementById('history').textContent = place.history;
+            
+            // Populate image gallery
+            const gallery = document.getElementById('imageGallery');
+            place.gallery.forEach(imgSrc => {
+                gallery.innerHTML += `
+                    <div class="gallery-img">
+                        <img src="${imgSrc}" alt="${place.name}" loading="lazy">
+                    </div>
+                `;
+            });
+            
+            // Populate additional info
+            const additionalInfo = document.getElementById('additionalInfo');
+            additionalInfo.innerHTML = `
+                <div class="info-card">
+                    <h3><i class="fas fa-lightbulb"></i> Tips for Visitors</h3>
+                    <ul style="padding-left: 20px; color: var(--text-medium); line-height: 1.8;">
+                        ${place.tips.map(tip => `<li>${tip}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        } else {
+            document.body.innerHTML = `
+                <div style="text-align: center; padding: 100px 20px;">
+                    <h1>Place not found</h1>
+                    <a href="index.html" class="btn btn-primary">Go Back Home</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner - Heritage Bharat</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3DB;</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0F4C75 0%, #1B6CA8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .planner-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
+        
+        .planner-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .planner-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .planner-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .planner-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group label i {
+            color: var(--saffron);
+            margin-right: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--saffron);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .btn-calculate {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--saffron), var(--golden));
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+        
+        .results-section {
+            display: none;
+        }
+        
+        .results-section.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .route-info {
+            background: var(--bg-cream);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+            border-left: 4px solid var(--saffron);
+        }
+        
+        .route-info h3 {
+            color: var(--teal);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .route-info p {
+            color: var(--text-medium);
+            margin: 5px 0;
+        }
+        
+        .transport-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .transport-card {
+            background: white;
+            border: 2px solid rgba(0,0,0,0.08);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .transport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--saffron);
+        }
+        
+        .transport-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .transport-card h4 {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .transport-details {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .transport-details p {
+            margin: 8px 0;
+        }
+        
+        .cost-per-person {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 12px;
+            border-left: 3px solid var(--saffron);
+        }
+        
+        .cost-per-person i {
+            color: var(--saffron);
+            font-size: 1rem;
+        }
+        
+        .price-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--saffron), var(--golden));
+            color: white;
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .travelers-count {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+        
+        .duration-tag {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--teal);
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .recommended-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--teal);
+            color: white;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .tips-section {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: var(--radius-md);
+            margin-top: 25px;
+        }
+        
+        .tips-section h3 {
+            color: var(--teal);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tips-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tips-section li {
+            color: var(--text-medium);
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tips-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--saffron);
+            font-weight: bold;
+        }
+        
+        .cost-disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin: 25px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .cost-disclaimer i {
+            color: #ff9800;
+            font-size: 1.3rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        
+        .cost-disclaimer p {
+            margin: 0;
+            color: #856404;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .cost-disclaimer strong {
+            color: #664d03;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .swap-btn {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--saffron);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all var(--transition);
+        }
+        
+        .swap-btn:hover {
+            transform: translateY(-50%) rotate(180deg);
+            background: var(--deep-saffron);
+        }
+        
+        .location-input-wrapper {
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .planner-card {
+                padding: 25px;
+            }
+            .planner-header h1 {
+                font-size: 1.8rem;
+            }
+            .transport-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="btn btn-primary back-btn">
+        <i class="fas fa-arrow-left"></i> <span data-lang="common.backToHome">Back to Home</span>
+    </a>
+
+    <!-- Language Dropdown -->
+    <div class="lang-dropdown" style="position: fixed; top: 20px; right: 20px; z-index: 1001;">
+        <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+            <i class="fas fa-globe"></i>
+            English
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="lang-menu" id="langMenu">
+            <div class="lang-option" onclick="changeLang('en')">
+                <span>English</span>
+                <i class="fas fa-check lang-check" id="check-en"></i>
+            </div>
+            <div class="lang-option" onclick="changeLang('hi')">
+                <span>हिंदी (Hindi)</span>
+                <i class="fas fa-check lang-check" id="check-hi"></i>
+            </div>
+            <div class="lang-option" onclick="changeLang('gu')">
+                <span>ગુજરાતી (Gujarati)</span>
+                <i class="fas fa-check lang-check" id="check-gu"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="planner-container">
+        <div class="planner-header">
+            <h1 data-lang="planner.title">🚗 Travel Planner</h1>
+            <p data-lang="planner.subtitle">Plan your journey across Saurashtra with ease</p>
+        </div>
+
+        <!-- Input Form -->
+        <div class="planner-card">
+            <h2 style="color: var(--teal); margin-bottom: 25px; font-family: 'Playfair Display', serif;">
+                <i class="fas fa-route"></i> <span data-lang="planner.planJourney">Plan Your Journey</span>
+            </h2>
+            
+            <form id="travelForm">
+                <div class="location-input-wrapper">
+                    <div class="form-group">
+                        <label for="fromLocation">
+                            <i class="fas fa-map-marker-alt"></i> <span data-lang="planner.from">From (Starting Point)</span>
+                        </label>
+                        <select id="fromLocation" class="form-control" required>
+                            <option value="" data-lang="planner.selectStarting">Select starting location</option>
+                            <option value="Rajkot">Rajkot</option>
+                            <option value="Junagadh">Junagadh</option>
+                            <option value="Jamnagar">Jamnagar</option>
+                            <option value="Porbandar">Porbandar</option>
+                            <option value="Bhavnagar">Bhavnagar</option>
+                            <option value="Amreli">Amreli</option>
+                            <option value="Gir Somnath">Gir Somnath (Veraval)</option>
+                            <option value="Devbhumi Dwarka">Devbhumi Dwarka</option>
+                            <option value="Morbi">Morbi</option>
+                            <option value="Surendranagar">Surendranagar</option>
+                            <option value="Botad">Botad</option>
+                            <option value="Ahmedabad">Ahmedabad (Outside Saurashtra)</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="swap-btn" onclick="swapLocations()" title="Swap locations">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+
+                    <div class="form-group">
+                        <label for="toLocation">
+                            <i class="fas fa-map-pin"></i> <span data-lang="planner.to">To (Destination)</span>
+                        </label>
+                        <select id="toLocation" class="form-control" required>
+                            <option value="" data-lang="planner.selectDestination">Select destination</option>
+                            <option value="Rajkot">Rajkot</option>
+                            <option value="Junagadh">Junagadh</option>
+                            <option value="Jamnagar">Jamnagar</option>
+                            <option value="Porbandar">Porbandar</option>
+                            <option value="Bhavnagar">Bhavnagar</option>
+                            <option value="Amreli">Amreli</option>
+                            <option value="Gir Somnath">Gir Somnath (Veraval)</option>
+                            <option value="Devbhumi Dwarka">Devbhumi Dwarka</option>
+                            <option value="Morbi">Morbi</option>
+                            <option value="Surendranagar">Surendranagar</option>
+                            <option value="Botad">Botad</option>
+                            <option value="Ahmedabad">Ahmedabad (Outside Saurashtra)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="travelers">
+                        <i class="fas fa-users"></i> <span data-lang="planner.travelers">Number of Travelers</span>
+                    </label>
+                    <input type="number" id="travelers" class="form-control" min="1" max="10" value="1" required>
+                </div>
+
+                <button type="submit" class="btn-calculate">
+                    <i class="fas fa-calculator"></i> <span data-lang="planner.calculate">Calculate Travel Options</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section">
+            <div class="planner-card">
+                <div class="route-info" id="routeInfo">
+                    <!-- Route information will be inserted here -->
+                </div>
+
+                <h2 style="color: var(--teal); margin-bottom: 20px; font-family: 'Playfair Display', serif;">
+                    <i class="fas fa-car"></i> Available Transport Options
+                </h2>
+
+                <div class="transport-grid" id="transportGrid">
+                    <!-- Transport cards will be inserted here -->
+                </div>
+
+                <!-- Cost and Time Disclaimer Note -->
+                <div class="cost-disclaimer">
+                    <i class="fas fa-info-circle"></i>
+                    <p><strong>Note:</strong> All costs and travel times mentioned are estimated and may vary based on season, booking time, traffic conditions, and service provider. Please verify current prices and schedules before traveling.</p>
+                </div>
+
+                <div class="tips-section">
+                    <h3><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+                    <ul id="travelTips">
+                        <!-- Tips will be inserted here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="lang.js"></script>
+    <script src="travel-data.js"></script>
+    <script>
+        // Form submission handler
+        document.getElementById('travelForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateRoute();
+        });
+
+        function swapLocations() {
+            const from = document.getElementById('fromLocation');
+            const to = document.getElementById('toLocation');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+        }
+
+        function calculateRoute() {
+            const from = document.getElementById('fromLocation').value;
+            const to = document.getElementById('toLocation').value;
+            const travelers = parseInt(document.getElementById('travelers').value);
+
+            if (!from || !to) {
+                alert('Please select both starting point and destination');
+                return;
+            }
+
+            if (from === to) {
+                alert('Starting point and destination cannot be the same');
+                return;
+            }
+
+            // Get route data
+            const routeKey = `${from}-${to}`;
+            let routeData = TRAVEL_ROUTES[routeKey];
+
+            // If direct route not found, try reverse
+            if (!routeData) {
+                const reverseKey = `${to}-${from}`;
+                routeData = TRAVEL_ROUTES[reverseKey];
+            }
+
+            // If still not found, use default
+            if (!routeData) {
+                routeData = getDefaultRoute(from, to);
+            }
+
+            displayResults(from, to, travelers, routeData);
+        }
+
+        function displayResults(from, to, travelers, routeData) {
+            // Display route info
+            document.getElementById('routeInfo').innerHTML = `
+                <h3><i class="fas fa-route"></i> Your Journey</h3>
+                <p><strong>From:</strong> ${from}</p>
+                <p><strong>To:</strong> ${to}</p>
+                <p><strong>Distance:</strong> Approximately ${routeData.distance} km</p>
+                <p><strong>Travelers:</strong> ${travelers} person${travelers > 1 ? 's' : ''}</p>
+            `;
+
+            // Display transport options
+            const transportGrid = document.getElementById('transportGrid');
+            transportGrid.innerHTML = '';
+
+            routeData.options.forEach(option => {
+                const totalCost = option.costPerPerson * travelers;
+                const card = document.createElement('div');
+                card.className = 'transport-card';
+                card.innerHTML = `
+                    ${option.recommended ? '<span class="recommended-badge">Recommended</span>' : ''}
+                    <div class="transport-icon">${option.icon}</div>
+                    <h4>${option.name}</h4>
+                    <div class="transport-details">
+                        <p><i class="fas fa-clock"></i> ${option.duration}</p>
+                        <p><i class="fas fa-info-circle"></i> ${option.description}</p>
+                        ${option.frequency ? `<p><i class="fas fa-calendar"></i> ${option.frequency}</p>` : ''}
+                    </div>
+                    <div class="cost-per-person">
+                        <i class="fas fa-user"></i> ₹${option.costPerPerson.toLocaleString()} per person
+                    </div>
+                    <div class="price-tag">
+                        Total: ₹${totalCost.toLocaleString()}
+                        ${travelers > 1 ? `<span class="travelers-count">(${travelers} travelers)</span>` : ''}
+                    </div>
+                    <div class="duration-tag">${option.duration}</div>
+                `;
+                transportGrid.appendChild(card);
+            });
+
+            // Display tips
+            const tipsContainer = document.getElementById('travelTips');
+            tipsContainer.innerHTML = routeData.tips.map(tip => `<li>${tip}</li>`).join('');
+
+            // Show results section
+            document.getElementById('resultsSection').classList.add('show');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function getDefaultRoute(from, to) {
+            // Default route for any combination
+            return {
+                distance: 150,
+                options: [
+                    {
+                        name: 'Private Car/Taxi',
+                        icon: '🚗',
+                        duration: '3-4 hours',
+                        costPerPerson: 1500,
+                        description: 'Comfortable and flexible travel',
+                        recommended: true
+                    },
+                    {
+                        name: 'Bus (GSRTC)',
+                        icon: '🚌',
+                        duration: '4-5 hours',
+                        costPerPerson: 200,
+                        description: 'Economical government bus service',
+                        frequency: 'Multiple buses daily'
+                    }
+                ],
+                tips: [
+                    'Book tickets in advance during festival seasons',
+                    'Carry water and snacks for the journey',
+                    'Check weather conditions before traveling'
+                ]
+            };
+        }
+    </script>
+</body>
+</html>

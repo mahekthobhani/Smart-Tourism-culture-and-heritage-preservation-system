@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║   HERITAGE BHARAT – admin.html                           ║
+  ║   Database Admin Panel (for development / demo)          ║
+  ╚══════════════════════════════════════════════════════════╝
+
+  This page lets you VIEW, ADD, and DELETE records
+  from all 5 database tables via the REST API.
+
+  Open at: http://localhost:3000/admin.html
+  (Server must be running first: npm run dev)
+-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heritage Bharat – Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ─── RESET & BASE ─── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --gold: #C9A84C;
+            --blue: #58a6ff;
+            --red: #f85149;
+            --green: #3fb950;
+            --orange: #d29922;
+            --purple: #bc8cff;
+            --teal: #39d353;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ─── HEADER ─── */
+        .admin-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-header .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .admin-header .logo span {
+            color: var(--muted);
+            font-weight: 400;
+            font-size: .85rem;
+            margin-left: 10px;
+        }
+
+        .header-links a {
+            color: var(--blue);
+            text-decoration: none;
+            font-size: .875rem;
+            margin-left: 18px;
+        }
+
+        .header-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── LAYOUT ─── */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 55px);
+        }
+
+        /* ─── SIDEBAR ─── */
+        .sidebar {
+            width: 220px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 16px 0;
+            flex-shrink: 0;
+            position: sticky;
+            top: 55px;
+            height: calc(100vh - 55px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: .7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--muted);
+            padding: 10px 18px 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 18px;
+            cursor: pointer;
+            font-size: .875rem;
+            color: var(--muted);
+            border-left: 3px solid transparent;
+            transition: all .2s;
+        }
+
+        .nav-item:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, .04);
+        }
+
+        .nav-item.active {
+            color: var(--gold);
+            border-left-color: var(--gold);
+            background: rgba(201, 168, 76, .08);
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--border);
+            color: var(--muted);
+            font-size: .7rem;
+            padding: 1px 7px;
+            border-radius: 20px;
+        }
+
+        .nav-item.active .badge {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* ─── MAIN CONTENT ─── */
+        .main {
+            flex: 1;
+            padding: 28px;
+            overflow-x: hidden;
+        }
+
+        /* ─── STAT CARDS ─── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat-card .stat-num {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-card .stat-lbl {
+            font-size: .8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ─── SECTION ─── */
+        .db-section {
+            display: none;
+        }
+
+        .db-section.active {
+            display: block;
+        }
+
+        .section-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-top h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-count {
+            font-size: .8rem;
+            color: var(--muted);
+            background: var(--border);
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        /* ─── ADD FORM ─── */
+        .add-form-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 22px;
+            overflow: hidden;
+        }
+
+        .form-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: .875rem;
+            font-weight: 500;
+            color: var(--green);
+            background: rgba(63, 185, 80, .06);
+            border-bottom: 1px solid var(--border);
+            user-select: none;
+        }
+
+        .form-toggle:hover {
+            background: rgba(63, 185, 80, .12);
+        }
+
+        .add-form {
+            padding: 18px;
+            display: none;
+        }
+
+        .add-form.open {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .form-grid.wide {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: .75rem;
+            color: var(--muted);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: .875rem;
+            padding: 8px 12px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: .85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            transition: opacity .2s, transform .1s;
+        }
+
+        .btn:hover {
+            opacity: .88;
+        }
+
+        .btn:active {
+            transform: scale(.97);
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: #000;
+        }
+
+        .btn-red {
+            background: var(--red);
+            color: #fff;
+        }
+
+        .btn-blue {
+            background: var(--blue);
+            color: #000;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #000;
+        }
+
+        .btn-ghost {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .btn-sm {
+            padding: 4px 10px;
+            font-size: .78rem;
+        }
+
+        /* ─── SEARCH BAR ─── */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 6px 12px;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: .875rem;
+            width: 220px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-bar i {
+            color: var(--muted);
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .84rem;
+            min-width: 600px;
+        }
+
+        thead th {
+            background: rgba(255, 255, 255, .03);
+            padding: 10px 14px;
+            text-align: left;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .15s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, .025);
+        }
+
+        tbody td {
+            padding: 9px 14px;
+            vertical-align: middle;
+        }
+
+        .td-id {
+            color: var(--muted);
+            font-size: .75rem;
+            width: 40px;
+        }
+
+        .td-actions {
+            white-space: nowrap;
+            width: 80px;
+        }
+
+        .td-truncate {
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .td-img img {
+            width: 48px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--border);
+            color: var(--muted);
+            font-size: .68rem;
+            padding: 2px 7px;
+            border-radius: 12px;
+            margin: 2px;
+        }
+
+        .category-pill {
+            font-size: .72rem;
+            padding: 2px 9px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .pill-Temple {
+            background: rgba(201, 168, 76, .2);
+            color: var(--gold);
+        }
+
+        .pill-Fort {
+            background: rgba(88, 166, 255, .2);
+            color: var(--blue);
+        }
+
+        .pill-Wildlife {
+            background: rgba(63, 185, 80, .2);
+            color: var(--green);
+        }
+
+        .pill-Museum {
+            background: rgba(188, 140, 255, .2);
+            color: var(--purple);
+        }
+
+        .pill-Pilgrimage {
+            background: rgba(248, 81, 73, .2);
+            color: var(--red);
+        }
+
+        .pill-Beach {
+            background: rgba(57, 211, 83, .2);
+            color: var(--teal);
+        }
+
+        /* ─── TOAST ─── */
+        #toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: #1f2937;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: .875rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all .3s;
+            z-index: 999;
+            max-width: 320px;
+        }
+
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        #toast.success {
+            border-left: 3px solid var(--green);
+        }
+
+        #toast.error {
+            border-left: 3px solid var(--red);
+        }
+
+        /* ─── LOADER ─── */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+
+        .loading i {
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+
+        .empty {
+            text-align: center;
+            padding: 32px;
+            color: var(--muted);
+        }
+
+        .empty i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* ─── CONFIRM DIALOG ─── */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            display: none;
+        }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .dialog {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .dialog h3 {
+            margin-bottom: 10px;
+        }
+
+        .dialog p {
+            color: var(--muted);
+            font-size: .875rem;
+            margin-bottom: 20px;
+        }
+
+        .dialog-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+    <header class="admin-header">
+        <div class="logo">
+            🏛️ Heritage Bharat
+            <span>Admin Dashboard</span>
+        </div>
+        <div class="header-links">
+            <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+            <a href="/api/stats" target="_blank"><i class="fas fa-code"></i> Raw API</a>
+        </div>
+    </header>
+
+    <div class="layout">
+
+        <!-- ═══ SIDEBAR ════════════════════════════════════════ -->
+        <aside class="sidebar">
+            <div class="sidebar-title">Database</div>
+            <div class="nav-item active" onclick="showSection('overview')">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </div>
+            <div class="nav-item" onclick="showSection('places')">
+                <i class="fas fa-landmark"></i> Places
+                <span class="badge" id="badge-places">–</span>
+            </div>
+            <div class="nav-item" onclick="showSection('gallery')">
+                <i class="fas fa-images"></i> Gallery
+                <span class="badge" id="badge-gallery">–</span>
+            </div>
+            <div class="nav-item" onclick="showSection('facts')">
+                <i class="fas fa-lightbulb"></i> Facts
+                <span class="badge" id="badge-facts">–</span>
+            </div>
+            <div class="nav-item" onclick="showSection('chatbot')">
+                <i class="fas fa-robot"></i> Chatbot KB
+                <span class="badge" id="badge-chatbot">–</span>
+            </div>
+            <div class="nav-item" onclick="showSection('messages')">
+                <i class="fas fa-envelope"></i> Messages
+                <span class="badge" id="badge-messages">–</span>
+            </div>
+        </aside>
+
+        <!-- ═══ MAIN CONTENT ════════════════════════════════════ -->
+        <main class="main">
+
+            <!-- ── OVERVIEW ───────────────────────────────────── -->
+            <section class="db-section active" id="sec-overview">
+                <h2 style="margin-bottom:20px;">📊 Database Overview</h2>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-places">–</div>
+                        <div class="stat-lbl">🏛️ Heritage Places</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-gallery">–</div>
+                        <div class="stat-lbl">🖼️ Gallery Images</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-facts">–</div>
+                        <div class="stat-lbl">💡 Cultural Facts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-chatbot">–</div>
+                        <div class="stat-lbl">🤖 Chatbot Entries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="stat-messages">–</div>
+                        <div class="stat-lbl">📬 Contact Messages</div>
+                    </div>
+                </div>
+
+                <div
+                    style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:20px;">
+                    <h3 style="margin-bottom:14px;font-size:1rem;">🗄️ Database Tables</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Table</th>
+                                <th>Columns</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>places</code></td>
+                                <td>id, name, district, category, emoji, description, image, map_link, tags</td>
+                                <td>Heritage & tourist sites</td>
+                            </tr>
+                            <tr>
+                                <td><code>gallery</code></td>
+                                <td>id, src, caption, size</td>
+                                <td>Photo gallery images</td>
+                            </tr>
+                            <tr>
+                                <td><code>facts</code></td>
+                                <td>id, emoji, title, fact</td>
+                                <td>"Did You Know?" cards</td>
+                            </tr>
+                            <tr>
+                                <td><code>chatbot_kb</code></td>
+                                <td>id, keyword, response</td>
+                                <td>Chatbot Q&amp;A knowledge</td>
+                            </tr>
+                            <tr>
+                                <td><code>contact_messages</code></td>
+                                <td>id, name, email, purpose, message, created_at</td>
+                                <td>User form submissions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;">
+                    <h3 style="margin-bottom:14px;font-size:1rem;">🔌 API Endpoints</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Endpoint</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="apiTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ── PLACES ─────────────────────────────────────── -->
+            <section class="db-section" id="sec-places">
+                <div class="section-top">
+                    <h2><i class="fas fa-landmark"></i> Heritage Places <span class="section-count"
+                            id="cnt-places">0</span></h2>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-places" placeholder="Search places..."
+                            oninput="filterTable('places-tbody', this.value)" />
+                    </div>
+                </div>
+
+                <!-- Add Place Form -->
+                <div class="add-form-wrapper">
+                    <div class="form-toggle" onclick="toggleForm('form-places')">
+                        <i class="fas fa-plus-circle"></i> Add New Heritage Place
+                    </div>
+                    <div class="add-form" id="form-places">
+                        <div class="form-grid">
+                            <div class="form-group"><label>Name *</label><input id="p-name"
+                                    placeholder="e.g. Somnath Temple" /></div>
+                            <div class="form-group"><label>District *</label>
+                                <select id="p-district">
+                                    <option value="">Select district…</option>
+                                    <option>Rajkot</option>
+                                    <option>Junagadh</option>
+                                    <option>Jamnagar</option>
+                                    <option>Porbandar</option>
+                                    <option>Bhavnagar</option>
+                                    <option>Amreli</option>
+                                    <option>Gir Somnath</option>
+                                    <option>Devbhumi Dwarka</option>
+                                    <option>Morbi</option>
+                                    <option>Surendranagar</option>
+                                    <option>Botad</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Category *</label>
+                                <select id="p-category">
+                                    <option value="">Select…</option>
+                                    <option>Temple</option>
+                                    <option>Fort</option>
+                                    <option>Museum</option>
+                                    <option>Wildlife</option>
+                                    <option>Beach</option>
+                                    <option>Pilgrimage</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Emoji</label><input id="p-emoji" placeholder="🏛️" /></div>
+                            <div class="form-group"><label>Tags (comma-separated)</label><input id="p-tags"
+                                    placeholder="History, Ancient, Art" /></div>
+                            <div class="form-group"><label>Image URL</label><input id="p-image"
+                                    placeholder="https://..." /></div>
+                            <div class="form-group"><label>Google Maps URL</label><input id="p-map"
+                                    placeholder="https://maps.google.com/..." /></div>
+                        </div>
+                        <div class="form-grid wide">
+                            <div class="form-group"><label>Description</label><textarea id="p-desc"
+                                    placeholder="Describe this heritage place…"></textarea></div>
+                        </div>
+                        <button class="btn btn-green" onclick="addPlace()"><i class="fas fa-plus"></i> Add
+                            Place</button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Emoji</th>
+                                <th>Name</th>
+                                <th>District</th>
+                                <th>Category</th>
+                                <th>Image</th>
+                                <th>Tags</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="places-tbody">
+                            <tr>
+                                <td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i><br>Loading…</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ── GALLERY ─────────────────────────────────────── -->
+            <section class="db-section" id="sec-gallery">
+                <div class="section-top">
+                    <h2><i class="fas fa-images"></i> Gallery Images <span class="section-count"
+                            id="cnt-gallery">0</span></h2>
+                </div>
+                <div class="add-form-wrapper">
+                    <div class="form-toggle" onclick="toggleForm('form-gallery')">
+                        <i class="fas fa-plus-circle"></i> Add Gallery Image
+                    </div>
+                    <div class="add-form" id="form-gallery">
+                        <div class="form-grid">
+                            <div class="form-group"><label>Image URL *</label><input id="g-src"
+                                    placeholder="https://images.unsplash.com/..." /></div>
+                            <div class="form-group"><label>Caption</label><input id="g-caption"
+                                    placeholder="e.g. Somnath Temple at Sunrise" /></div>
+                            <div class="form-group"><label>Size</label>
+                                <select id="g-size">
+                                    <option value="normal">Normal (1×1)</option>
+                                    <option value="wide">Wide (2 columns)</option>
+                                    <option value="tall">Tall (2 rows)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-green" onclick="addGallery()"><i class="fas fa-plus"></i> Add
+                            Image</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Preview</th>
+                                <th>Caption</th>
+                                <th>Size</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gallery-tbody">
+                            <tr>
+                                <td colspan="5" class="loading"><i class="fas fa-spinner fa-spin"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ── FACTS ──────────────────────────────────────── -->
+            <section class="db-section" id="sec-facts">
+                <div class="section-top">
+                    <h2><i class="fas fa-lightbulb"></i> Cultural Facts <span class="section-count"
+                            id="cnt-facts">0</span></h2>
+                </div>
+                <div class="add-form-wrapper">
+                    <div class="form-toggle" onclick="toggleForm('form-facts')">
+                        <i class="fas fa-plus-circle"></i> Add Cultural Fact
+                    </div>
+                    <div class="add-form" id="form-facts">
+                        <div class="form-grid">
+                            <div class="form-group"><label>Emoji</label><input id="f-emoji" placeholder="💡" /></div>
+                            <div class="form-group"><label>Title *</label><input id="f-title"
+                                    placeholder="e.g. Rarest Big Cat" /></div>
+                        </div>
+                        <div class="form-grid wide">
+                            <div class="form-group"><label>Fact Text *</label><textarea id="f-text"
+                                    placeholder="Write your interesting fact here…"></textarea></div>
+                        </div>
+                        <button class="btn btn-green" onclick="addFact()"><i class="fas fa-plus"></i> Add Fact</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Emoji</th>
+                                <th>Title</th>
+                                <th>Fact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="facts-tbody">
+                            <tr>
+                                <td colspan="5" class="loading"><i class="fas fa-spinner fa-spin"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ── CHATBOT KB ──────────────────────────────────── -->
+            <section class="db-section" id="sec-chatbot">
+                <div class="section-top">
+                    <h2><i class="fas fa-robot"></i> Chatbot Knowledge Base <span class="section-count"
+                            id="cnt-chatbot">0</span></h2>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search keywords…"
+                            oninput="filterTable('chatbot-tbody', this.value)" />
+                    </div>
+                </div>
+                <div class="add-form-wrapper">
+                    <div class="form-toggle" onclick="toggleForm('form-chatbot')">
+                        <i class="fas fa-plus-circle"></i> Add Chatbot Entry
+                    </div>
+                    <div class="add-form" id="form-chatbot">
+                        <div class="form-grid">
+                            <div class="form-group"><label>Keyword *</label><input id="c-keyword"
+                                    placeholder="e.g. somnath" /></div>
+                        </div>
+                        <div class="form-grid wide">
+                            <div class="form-group"><label>Response *</label><textarea id="c-response"
+                                    placeholder="🛕 Somnath Temple is one of the 12 Jyotirlinga…"></textarea></div>
+                        </div>
+                        <button class="btn btn-green" onclick="addChatbot()"><i class="fas fa-plus"></i> Add
+                            Entry</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Keyword</th>
+                                <th>Response</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chatbot-tbody">
+                            <tr>
+                                <td colspan="4" class="loading"><i class="fas fa-spinner fa-spin"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ── MESSAGES ────────────────────────────────────── -->
+            <section class="db-section" id="sec-messages">
+                <div class="section-top">
+                    <h2><i class="fas fa-envelope"></i> Contact Messages <span class="section-count"
+                            id="cnt-messages">0</span></h2>
+                    <button class="btn btn-ghost btn-sm" onclick="loadMessages()"><i class="fas fa-sync-alt"></i>
+                        Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Purpose</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messages-tbody">
+                            <tr>
+                                <td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ═══ CONFIRM DIALOG ═══════════════════════════════════ -->
+    <div class="overlay" id="confirmOverlay">
+        <div class="dialog">
+            <h3>⚠️ Confirm Delete</h3>
+            <p id="confirmMsg">Are you sure you want to delete this record? This cannot be undone.</p>
+            <div class="dialog-actions">
+                <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+                <button class="btn btn-red" id="confirmOkBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TOAST NOTIFICATION ════════════════════════════════ -->
+    <div id="toast"></div>
+
+    <script>
+        /* ─────────────────────────────────────────────────────────
+           ADMIN PANEL JAVASCRIPT
+           ───────────────────────────────────────────────────────── */
+
+        const API = '';   // Uses same-origin server
+
+        // ── TOAST NOTIFICATIONS ──────────────────────────────────
+        let toastTimer;
+        function toast(msg, type = 'success') {
+            const el = document.getElementById('toast');
+            el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+            el.className = `show ${type}`;
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.className = '', 3500);
+        }
+
+        // ── CONFIRM DIALOG ───────────────────────────────────────
+        let confirmCallback = null;
+        function confirm(msg, cb) {
+            document.getElementById('confirmMsg').textContent = msg;
+            document.getElementById('confirmOverlay').classList.add('show');
+            confirmCallback = cb;
+            document.getElementById('confirmOkBtn').onclick = () => { closeConfirm(); cb(); };
+        }
+        function closeConfirm() {
+            document.getElementById('confirmOverlay').classList.remove('show');
+        }
+
+        // ── NAVIGATION ───────────────────────────────────────────
+        function showSection(name) {
+            document.querySelectorAll('.db-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`sec-${name}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Lazy-load section data on first visit
+            const loaders = {
+                places: loadPlaces,
+                gallery: loadGallery,
+                facts: loadFacts,
+                chatbot: loadChatbot,
+                messages: loadMessages
+            };
+            if (loaders[name]) loaders[name]();
+        }
+
+        // ── TOGGLE FORMS ─────────────────────────────────────────
+        function toggleForm(id) {
+            const f = document.getElementById(id);
+            f.classList.toggle('open');
+        }
+
+        // ── TABLE SEARCH FILTER ──────────────────────────────────
+        function filterTable(tbodyId, query) {
+            const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+            const q = query.toLowerCase();
+            rows.forEach(tr => {
+                tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // OVERVIEW – STATS
+        // ══════════════════════════════════════════════════════════
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API}/api/stats`);
+                const data = await res.json();
+                if (!data.success) return;
+                const s = data.stats;
+
+                // Main stat cards
+                document.getElementById('stat-places').textContent = s.places;
+                document.getElementById('stat-gallery').textContent = s.gallery;
+                document.getElementById('stat-facts').textContent = s.facts;
+                document.getElementById('stat-messages').textContent = s.messages;
+
+                // Sidebar badges
+                document.getElementById('badge-places').textContent = s.places;
+                document.getElementById('badge-gallery').textContent = s.gallery;
+                document.getElementById('badge-facts').textContent = s.facts;
+                document.getElementById('badge-messages').textContent = s.messages;
+
+                // Chatbot count (separate endpoint)
+                const cr = await fetch(`${API}/api/chatbot`);
+                const cd = await cr.json();
+                if (cd.success) {
+                    document.getElementById('stat-chatbot').textContent = cd.count;
+                    document.getElementById('badge-chatbot').textContent = cd.count;
+                }
+            } catch (e) {
+                console.error('Stats error:', e);
+            }
+        }
+
+        // API reference table
+        const apiEndpoints = [
+            ['GET', '/api/places', 'Fetch all / filtered places'],
+            ['POST', '/api/places', 'Add a new heritage place'],
+            ['PUT', '/api/places/:id', 'Update a place by ID'],
+            ['DELETE', '/api/places/:id', 'Delete a place by ID'],
+            ['GET', '/api/gallery', 'Fetch all gallery images'],
+            ['POST', '/api/gallery', 'Add a gallery image'],
+            ['DELETE', '/api/gallery/:id', 'Delete a gallery image'],
+            ['GET', '/api/facts?limit=6', 'Fetch random facts'],
+            ['GET', '/api/facts/all', 'Fetch all facts'],
+            ['POST', '/api/facts', 'Add a cultural fact'],
+            ['DELETE', '/api/facts/:id', 'Delete a fact'],
+            ['GET', '/api/chat?message=', 'Chatbot response'],
+            ['GET', '/api/chatbot', 'All chatbot entries (admin)'],
+            ['POST', '/api/chatbot', 'Add chatbot keyword'],
+            ['DELETE', '/api/chatbot/:id', 'Delete chatbot keyword'],
+            ['POST', '/api/contact', 'Save contact form'],
+            ['GET', '/api/messages', 'View all messages'],
+            ['DELETE', '/api/messages/:id', 'Delete a message'],
+            ['GET', '/api/stats', 'Database row counts'],
+        ];
+
+        function buildApiTable() {
+            const colors = { GET: '#3fb950', POST: '#58a6ff', PUT: '#d29922', DELETE: '#f85149' };
+            document.getElementById('apiTable').innerHTML = apiEndpoints.map(([m, url, desc]) => `
+        <tr>
+            <td><span style="font-weight:700;color:${colors[m]}">${m}</span></td>
+            <td><code style="color:var(--purple)">${url}</code></td>
+            <td style="color:var(--muted)">${desc}</td>
+        </tr>
+    `).join('');
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // PLACES TABLE
+        // ══════════════════════════════════════════════════════════
+        async function loadPlaces() {
+            const tbody = document.getElementById('places-tbody');
+            tbody.innerHTML = `<tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading…</td></tr>`;
+            try {
+                const res = await fetch(`${API}/api/places`);
+                const data = await res.json();
+                document.getElementById('cnt-places').textContent = data.count;
+                document.getElementById('badge-places').textContent = data.count;
+
+                if (data.places.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="empty"><i class="fas fa-inbox"></i><br>No places yet</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = data.places.map(p => `
+            <tr>
+                <td class="td-id">${p.id}</td>
+                <td style="font-size:1.3rem">${p.emoji}</td>
+                <td><strong>${p.name}</strong></td>
+                <td>${p.district}</td>
+                <td><span class="category-pill pill-${p.category}">${p.category}</span></td>
+                <td class="td-img"><img src="${p.image}" alt="" onerror="this.style.display='none'" /><td>
+                <td>${(Array.isArray(p.tags) ? p.tags : []).map(t => `<span class="tag">${t}</span>`).join('')}</td>
+                <td class="td-actions">
+                    <button class="btn btn-red btn-sm" onclick="deletePlace(${p.id}, '${p.name.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="8" class="empty" style="color:var(--red)">⚠️ Server not running. Start it with <code>npm run dev</code></td></tr>`;
+            }
+        }
+
+        async function addPlace() {
+            const name = document.getElementById('p-name').value.trim();
+            const district = document.getElementById('p-district').value;
+            const category = document.getElementById('p-category').value;
+            const emoji = document.getElementById('p-emoji').value.trim() || '🏛️';
+            const desc = document.getElementById('p-desc').value.trim();
+            const image = document.getElementById('p-image').value.trim();
+            const map_link = document.getElementById('p-map').value.trim();
+            const tagsRaw = document.getElementById('p-tags').value;
+            const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+
+            if (!name || !district || !category) { toast('Name, district and category are required.', 'error'); return; }
+
+            const res = await fetch(`${API}/api/places`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, district, category, emoji, description: desc, image, map_link, tags })
+            });
+            const data = await res.json();
+            if (data.success) { toast(`✅ Place added (ID ${data.id})`); loadPlaces(); loadStats(); }
+            else toast(data.error, 'error');
+        }
+
+        function deletePlace(id, name) {
+            confirm(`Delete "${name}" (ID ${id})?`, async () => {
+                const res = await fetch(`${API}/api/places/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) { toast('Place deleted'); loadPlaces(); loadStats(); }
+                else toast(data.error, 'error');
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // GALLERY TABLE
+        // ══════════════════════════════════════════════════════════
+        async function loadGallery() {
+            const tbody = document.getElementById('gallery-tbody');
+            tbody.innerHTML = `<tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-spin"></i></td></tr>`;
+            try {
+                const res = await fetch(`${API}/api/gallery`);
+                const data = await res.json();
+                document.getElementById('cnt-gallery').textContent = data.count;
+                document.getElementById('badge-gallery').textContent = data.count;
+
+                tbody.innerHTML = data.gallery.map(g => `
+            <tr>
+                <td class="td-id">${g.id}</td>
+                <td class="td-img"><img src="${g.src}" alt="${g.caption}" onerror="this.style.opacity='.3'" /></td>
+                <td class="td-truncate">${g.caption}</td>
+                <td><span class="tag">${g.size}</span></td>
+                <td class="td-actions">
+                    <button class="btn btn-red btn-sm" onclick="deleteGallery(${g.id})"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red)">⚠️ Server offline</td></tr>`;
+            }
+        }
+
+        async function addGallery() {
+            const src = document.getElementById('g-src').value.trim();
+            const caption = document.getElementById('g-caption').value.trim();
+            const size = document.getElementById('g-size').value;
+            if (!src) { toast('Image URL is required.', 'error'); return; }
+            const res = await fetch(`${API}/api/gallery`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ src, caption, size }) });
+            const data = await res.json();
+            if (data.success) { toast(`Image added (ID ${data.id})`); loadGallery(); loadStats(); }
+            else toast(data.error, 'error');
+        }
+
+        function deleteGallery(id) {
+            confirm(`Delete gallery image ID ${id}?`, async () => {
+                const res = await fetch(`${API}/api/gallery/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) { toast('Image deleted'); loadGallery(); loadStats(); }
+                else toast(data.error, 'error');
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // FACTS TABLE
+        // ══════════════════════════════════════════════════════════
+        async function loadFacts() {
+            const tbody = document.getElementById('facts-tbody');
+            tbody.innerHTML = `<tr><td colspan="5" class="loading"><i class="fas fa-spinner fa-spin"></i></td></tr>`;
+            try {
+                const res = await fetch(`${API}/api/facts/all`);
+                const data = await res.json();
+                document.getElementById('cnt-facts').textContent = data.count;
+                document.getElementById('badge-facts').textContent = data.count;
+
+                tbody.innerHTML = data.facts.map(f => `
+            <tr>
+                <td class="td-id">${f.id}</td>
+                <td style="font-size:1.4rem">${f.emoji}</td>
+                <td><strong>${f.title}</strong></td>
+                <td class="td-truncate" style="max-width:340px;">${f.fact}</td>
+                <td class="td-actions">
+                    <button class="btn btn-red btn-sm" onclick="deleteFact(${f.id})"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" class="empty" style="color:var(--red)">⚠️ Server offline</td></tr>`;
+            }
+        }
+
+        async function addFact() {
+            const emoji = document.getElementById('f-emoji').value.trim() || '💡';
+            const title = document.getElementById('f-title').value.trim();
+            const fact = document.getElementById('f-text').value.trim();
+            if (!title || !fact) { toast('Title and fact are required.', 'error'); return; }
+            const res = await fetch(`${API}/api/facts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ emoji, title, fact }) });
+            const data = await res.json();
+            if (data.success) { toast(`Fact added (ID ${data.id})`); loadFacts(); loadStats(); }
+            else toast(data.error, 'error');
+        }
+
+        function deleteFact(id) {
+            confirm(`Delete fact ID ${id}?`, async () => {
+                const res = await fetch(`${API}/api/facts/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) { toast('Fact deleted'); loadFacts(); loadStats(); }
+                else toast(data.error, 'error');
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // CHATBOT TABLE
+        // ══════════════════════════════════════════════════════════
+        async function loadChatbot() {
+            const tbody = document.getElementById('chatbot-tbody');
+            tbody.innerHTML = `<tr><td colspan="4" class="loading"><i class="fas fa-spinner fa-spin"></i></td></tr>`;
+            try {
+                const res = await fetch(`${API}/api/chatbot`);
+                const data = await res.json();
+                document.getElementById('cnt-chatbot').textContent = data.count;
+                document.getElementById('badge-chatbot').textContent = data.count;
+
+                tbody.innerHTML = data.entries.map(e => `
+            <tr>
+                <td class="td-id">${e.id}</td>
+                <td><code style="color:var(--blue)">${e.keyword}</code></td>
+                <td class="td-truncate" style="max-width:420px;color:var(--muted)">${e.response}</td>
+                <td class="td-actions">
+                    <button class="btn btn-red btn-sm" onclick="deleteChatbot(${e.id}, '${e.keyword}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty" style="color:var(--red)">⚠️ Server offline</td></tr>`;
+            }
+        }
+
+        async function addChatbot() {
+            const keyword = document.getElementById('c-keyword').value.trim();
+            const response = document.getElementById('c-response').value.trim();
+            if (!keyword || !response) { toast('Keyword and response are required.', 'error'); return; }
+            const res = await fetch(`${API}/api/chatbot`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keyword, response }) });
+            const data = await res.json();
+            if (data.success) { toast(`Chatbot entry saved`); loadChatbot(); loadStats(); }
+            else toast(data.error, 'error');
+        }
+
+        function deleteChatbot(id, keyword) {
+            confirm(`Delete keyword "${keyword}" (ID ${id})?`, async () => {
+                const res = await fetch(`${API}/api/chatbot/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) { toast('Entry deleted'); loadChatbot(); loadStats(); }
+                else toast(data.error, 'error');
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // MESSAGES TABLE
+        // ══════════════════════════════════════════════════════════
+        async function loadMessages() {
+            const tbody = document.getElementById('messages-tbody');
+            tbody.innerHTML = `<tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i></td></tr>`;
+            try {
+                const res = await fetch(`${API}/api/messages`);
+                const data = await res.json();
+                document.getElementById('cnt-messages').textContent = data.count;
+                document.getElementById('badge-messages').textContent = data.count;
+
+                if (data.messages.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="empty"><i class="fas fa-inbox"></i><br>No messages yet</td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = data.messages.map(m => `
+            <tr>
+                <td class="td-id">${m.id}</td>
+                <td><strong>${m.name}</strong></td>
+                <td style="color:var(--blue)">${m.email}</td>
+                <td><span class="tag">${m.purpose || '–'}</span></td>
+                <td class="td-truncate" style="max-width:260px;color:var(--muted)">${m.message}</td>
+                <td style="color:var(--muted);font-size:.75rem;white-space:nowrap">${m.created_at}</td>
+                <td class="td-actions">
+                    <button class="btn btn-red btn-sm" onclick="deleteMessage(${m.id}, '${m.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="7" class="empty" style="color:var(--red)">⚠️ Server offline</td></tr>`;
+            }
+        }
+
+        function deleteMessage(id, name) {
+            confirm(`Delete message from "${name}" (ID ${id})?`, async () => {
+                const res = await fetch(`${API}/api/messages/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) { toast('Message deleted'); loadMessages(); loadStats(); }
+                else toast(data.error, 'error');
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════
+        // INIT
+        // ══════════════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', () => {
+            buildApiTable();     // API reference table
+            loadStats();         // Stats cards + badges
+            loadPlaces();        // Preload places for the first click
+        });
+    </script>
+
+</body>
+
+</html>

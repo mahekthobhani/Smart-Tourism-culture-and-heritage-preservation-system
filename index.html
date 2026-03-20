@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<!-- 
+  ╔══════════════════════════════════════════════════════════╗
+  ║   HERITAGE BHARAT - Smart Tourism & Cultural Portal      ║
+  ║   Saurashtra, Gujarat, India                             ║
+  ║   Built with: HTML, CSS, JavaScript                      ║
+  ╚══════════════════════════════════════════════════════════╝
+
+  WHAT IS HTML?
+  HTML (HyperText Markup Language) is the skeleton of a website.
+  Every thing you see on a webpage is written using HTML tags.
+  Tags look like: <tagname> content </tagname>
+-->
+
+<html lang="en">
+
+<head>
+    <!-- META TAGS: These tell the browser how to display the page -->
+    <meta charset="UTF-8" />
+    <!-- UTF-8 supports all languages including Gujarati & Hindi -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- This makes the website look good on mobile phones too -->
+
+    <meta name="description"
+        content="Heritage Bharat - Explore the rich culture, temples, forts and traditions of Saurashtra, Gujarat." />
+    <!-- This text shows on Google search results -->
+
+    <title>Heritage Bharat | Smart Tourism · Saurashtra</title>
+    <!-- This text appears on the browser tab -->
+
+    <!-- FAVICON: Small icon shown on browser tab -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3DB;</text></svg>" />
+
+    <!-- GOOGLE FONTS: Beautiful typography from Google (free) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- FONT AWESOME ICONS: Free icons library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- OUR OWN CSS FILE: All the colors and design are in style.css -->
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+
+<body>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 1: NAVIGATION BAR (Top Menu)
+       This stays fixed at the top as you scroll.
+       ════════════════════════════════════════════ -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <!-- Website logo/name -->
+            <span class="nav-logo">🏛️</span>
+            <span class="nav-title">Heritage Bharat</span>
+        </div>
+
+        <!-- Hamburger icon for mobile screens (3 lines = ☰) -->
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- Navigation links -->
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero" data-lang="nav.home">Home</a></li>
+            <li><a href="#districts" data-lang="nav.districts">Districts</a></li>
+            <li><a href="#heritage" data-lang="nav.heritage">Heritage</a></li>
+            <li><a href="#travel-planner" data-lang="nav.travelPlanner">Travel Planner</a></li>
+            <li><a href="#gallery" data-lang="nav.gallery">Gallery</a></li>
+            <li><a href="#facts" data-lang="nav.didYouKnow">Did You Know?</a></li>
+            <li><a href="#education" data-lang="nav.learn">Learn</a></li>
+            <li><a href="#contact" data-lang="nav.contact">Contact</a></li>
+            <li><a href="/dashboard" target="_blank" class="dashboard-link" title="Admin Dashboard">
+                <i class="fas fa-cog"></i> Dashboard
+            </a></li>
+        </ul>
+
+        <!-- Language Dropdown -->
+        <div class="lang-dropdown">
+            <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+                <i class="fas fa-globe"></i>
+                English
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="lang-menu" id="langMenu">
+                <div class="lang-option" onclick="changeLang('en')">
+                    <span>English</span>
+                    <i class="fas fa-check lang-check" id="check-en"></i>
+                </div>
+                <div class="lang-option" onclick="changeLang('hi')">
+                    <span>हिंदी (Hindi)</span>
+                    <i class="fas fa-check lang-check" id="check-hi"></i>
+                </div>
+                <div class="lang-option" onclick="changeLang('gu')">
+                    <span>ગુજરાતી (Gujarati)</span>
+                    <i class="fas fa-check lang-check" id="check-gu"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 2: HERO SECTION
+       The big banner at the top of the page.
+       It greets the visitor and makes first impression.
+       ════════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+
+        <!-- Animated particles in background -->
+        <div class="particles" id="particles"></div>
+
+        <!-- Overlay makes the background image darker so text is readable -->
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <!-- Badge above heading -->
+            <div class="hero-content">
+            
+            </div>
+
+            <!-- Main heading -->
+            <h1 class="hero-title">
+                <span data-lang="hero.title1">Discover the Soul of</span>
+                <span class="gradient-text" data-lang="hero.title2">Saurashtra</span>
+            </h1>
+
+            <!-- Subtitle / tagline -->
+            <p class="hero-subtitle">
+                Digitally preserving the temples, forts, traditions and cultural treasures<br />
+                of Gujarat's historic Saurashtra region for generations to come.
+            </p>
+
+            <!-- Statistics / quick facts row -->
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label" data-lang="hero.districts">Districts</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label" data-lang="hero.heritageSites">Heritage Sites</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3000+</div>
+                    <div class="stat-label" data-lang="hero.yearsOfHistory">Years of History</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label" data-lang="hero.storiesToTell">Stories to Tell</div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="hero-buttons">
+                <a href="#districts" class="btn btn-primary">
+                    <i class="fas fa-compass"></i> <span data-lang="hero.startExploring">Start Exploring</span>
+                </a>
+                <a href="#heritage" class="btn btn-secondary">
+                    <i class="fas fa-play-circle"></i> <span data-lang="hero.virtualTour">Virtual Tour</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll indicator arrow at bottom -->
+        <div class="scroll-indicator" onclick="scrollToSection('districts')">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- SVG wave divider between hero and search -->
+    <div style="background:#0F4C75; margin-top:-2px; line-height:0;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 60" style="display:block;">
+            <path fill="#0F4C75" fill-opacity="1" d="M0,30 C360,60 1080,0 1440,30 L1440,0 L0,0 Z" />
+        </svg>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 3: SEARCH BAR
+       Visitors can search for places they want to visit.
+       ════════════════════════════════════════════ -->
+    <section class="search-section" id="search-section">
+        <div class="container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <!-- Advanced search input with operators support -->
+                <input type="text" id="searchInput" 
+                    data-lang-placeholder="search.placeholder" 
+                    placeholder="Search temples, forts, museums... Try: temple in:rajkot or category:wildlife"
+                    oninput="handleSearchInput()" 
+                    onfocus="showSearchSuggestions()"
+                    onkeydown="handleSearchKeydown(event)"
+                    autocomplete="off" 
+                    spellcheck="false"
+                    title="Advanced search: Use 'in:district', 'category:type', 'near:place' operators" />
+                
+                <!-- Voice Search Button -->
+                <button class="voice-search-btn" onclick="startVoiceSearch()" id="voiceBtn" title="Voice Search">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                
+                <!-- Advanced Filters Toggle -->
+                <button class="filters-toggle-btn" onclick="toggleAdvancedFilters()" id="filtersBtn" title="Advanced Filters">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+                
+                <button class="search-clear" onclick="clearSearch()" id="clearBtn" style="display: none;">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <!-- Search Suggestions Dropdown -->
+                <div class="search-suggestions" id="searchSuggestions" style="display: none;">
+                    <div class="suggestions-header">
+                        <span>💡 Search Suggestions</span>
+                        <span class="search-tips-btn" onclick="showSearchTips()">❓ Tips</span>
+                    </div>
+                    <div class="suggestions-list" id="suggestionsList">
+                        <!-- Suggestions will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Advanced Filters Panel -->
+                <div class="advanced-filters" id="advancedFilters" style="display: none;">
+                    <div class="filters-header">
+                        <span>🔧 Advanced Filters</span>
+                        <button onclick="resetAllFilters()" class="reset-filters-btn">Reset All</button>
+                    </div>
+                    <div class="filters-content">
+                        <div class="filter-group">
+                            <label>📍 Distance from you:</label>
+                            <select id="distanceFilter">
+                                <option value="">Any distance</option>
+                                <option value="50">Within 50 km</option>
+                                <option value="100">Within 100 km</option>
+                                <option value="200">Within 200 km</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>⭐ Visitor Rating:</label>
+                            <select id="ratingFilter">
+                                <option value="">Any rating</option>
+                                <option value="4">4+ stars</option>
+                                <option value="3">3+ stars</option>
+                                <option value="2">2+ stars</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>💰 Budget Range:</label>
+                            <select id="budgetFilter">
+                                <option value="">Any budget</option>
+                                <option value="low">₹0 - ₹500</option>
+                                <option value="medium">₹500 - ₹1500</option>
+                                <option value="high">₹1500+</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>🕒 Best time to visit:</label>
+                            <select id="seasonFilter">
+                                <option value="">Any time</option>
+                                <option value="winter">Winter (Oct-Mar)</option>
+                                <option value="summer">Summer (Apr-Jun)</option>
+                                <option value="monsoon">Monsoon (Jul-Sep)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>🎯 Interests:</label>
+                            <div class="interest-tags">
+                                <button class="interest-tag" data-interest="history">🏛️ History</button>
+                                <button class="interest-tag" data-interest="spiritual">🕊️ Spiritual</button>
+                                <button class="interest-tag" data-interest="nature">🌿 Nature</button>
+                                <button class="interest-tag" data-interest="adventure">⛰️ Adventure</button>
+                                <button class="interest-tag" data-interest="family">👨‍👩‍👧‍👦 Family</button>
+                                <button class="interest-tag" data-interest="photography">📸 Photography</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- This area shows search results count -->
+            <p class="search-results-text" id="searchResultText"></p>
+            
+            <!-- Quick Search Tags -->
+            <div class="quick-search-tags" id="quickSearchTags">
+                <span class="quick-search-label">Quick Search:</span>
+                <button class="quick-tag" onclick="selectSuggestion('temple')">Temples</button>
+                <button class="quick-tag" onclick="selectSuggestion('museum')">Museums</button>
+                <button class="quick-tag" onclick="selectSuggestion('fort')">Forts</button>
+                <button class="quick-tag" onclick="selectSuggestion('wildlife')">Wildlife</button>
+                <button class="quick-tag" onclick="selectSuggestion('gandhi')">Gandhi</button>
+                <button class="quick-tag" onclick="selectSuggestion('beach')">Beaches</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 4: DISTRICT SELECTOR (Interactive Map)
+       Visitors can click on a district name to see
+       places in that district.
+       ════════════════════════════════════════════ -->
+    <section class="districts-section" id="districts">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="districts.tag">🗺️ Explore by Region</span>
+                <h2 class="section-title" data-lang="districts.title">11 Districts of Saurashtra</h2>
+                <p class="section-subtitle" data-lang="districts.subtitle">Click on any district to filter heritage places</p>
+            </div>
+
+            <!-- District buttons - clicking them filters the place cards below -->
+            <div class="district-grid" id="districtGrid">
+                <!-- Each button has onclick="filterDistrict('name')" to call JavaScript -->
+                <button class="district-btn active" onclick="filterDistrict('All')">
+                    <span class="district-icon">🌍</span>
+                    <span data-lang="districts.all">All Districts</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Rajkot')">
+                    <span class="district-icon">🏙️</span>
+                    <span>Rajkot</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Junagadh')">
+                    <span class="district-icon">🏔️</span>
+                    <span>Junagadh</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Jamnagar')">
+                    <span class="district-icon">🌊</span>
+                    <span>Jamnagar</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Porbandar')">
+                    <span class="district-icon">🕊️</span>
+                    <span>Porbandar</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Bhavnagar')">
+                    <span class="district-icon">⚓</span>
+                    <span>Bhavnagar</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Amreli')">
+                    <span class="district-icon">🌿</span>
+                    <span>Amreli</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Gir Somnath')">
+                    <span class="district-icon">🦁</span>
+                    <span>Gir Somnath</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Devbhumi Dwarka')">
+                    <span class="district-icon">🔱</span>
+                    <span>Devbhumi Dwarka</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Morbi')">
+                    <span class="district-icon">🏺</span>
+                    <span>Morbi</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Surendranagar')">
+                    <span class="district-icon">🌾</span>
+                    <span>Surendranagar</span>
+                </button>
+                <button class="district-btn" onclick="filterDistrict('Botad')">
+                    <span class="district-icon">🛕</span>
+                    <span>Botad</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 5: HERITAGE PLACE CARDS
+       Each card shows a heritage/tourist place.
+       JavaScript creates these cards from data in script.js
+       ════════════════════════════════════════════ -->
+    <section class="heritage-section" id="heritage">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="heritage.tag">🏛️ Cultural Heritage Archive</span>
+                <h2 class="section-title" data-lang="heritage.title">Heritage & Tourist Places</h2>
+                <p class="section-subtitle" data-lang="heritage.subtitle">Explore temples, forts, museums and natural wonders</p>
+            </div>
+
+            <!-- Category filter tabs -->
+            <div class="category-tabs">
+                <button class="cat-tab active" onclick="filterCategory('All', this)" data-lang="heritage.all">All</button>
+                <button class="cat-tab" onclick="filterCategory('Temple', this)" data-lang="heritage.temples">🛕 Temples</button>
+                <button class="cat-tab" onclick="filterCategory('Fort', this)" data-lang="heritage.forts">🏰 Forts</button>
+                <button class="cat-tab" onclick="filterCategory('Wildlife', this)" data-lang="heritage.wildlife">🦁 Wildlife</button>
+                <button class="cat-tab" onclick="filterCategory('Beach', this)" data-lang="heritage.beaches">🏖️ Beaches</button>
+                <button class="cat-tab" onclick="filterCategory('Museum', this)" data-lang="heritage.museums">🏛️ Museums</button>
+                <button class="cat-tab" onclick="filterCategory('Pilgrimage', this)" data-lang="heritage.pilgrimage">🕊️ Pilgrimage</button>
+            </div>
+
+            <!-- 
+        Heritage cards appear here.
+        JavaScript will automatically fill this div with cards.
+        id="placesGrid" is used in script.js to find this div.
+      -->
+            <div class="places-grid" id="placesGrid">
+                <!-- Cards will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Message shown when no search result found -->
+            <div class="no-results" id="noResults" style="display:none;">
+                <div class="no-results-icon">🔍</div>
+                <h3 data-lang="heritage.noResults">No places found!</h3>
+                <p data-lang="heritage.noResultsText">Try searching with a different keyword or select "All Districts"</p>
+                <button onclick="clearSearch(); filterDistrict('All')" class="btn btn-primary" data-lang="heritage.showAll">Show All Places</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 6: TRAVEL PLANNER
+       Interactive tool to plan journey and calculate costs
+       ════════════════════════════════════════════ -->
+    <section class="travel-planner-section" id="travel-planner">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="travelSection.tag">🚗 Plan Your Trip</span>
+                <h2 class="section-title" data-lang="travelSection.title">Travel Planner</h2>
+                <p class="section-subtitle" data-lang="travelSection.subtitle">Calculate costs and compare transport options for your journey</p>
+            </div>
+
+            <div class="planner-embed-card">
+                <div class="planner-intro">
+                    <div class="planner-icon">🗺️</div>
+                    <h3 data-lang="travelSection.heading">Plan Your Journey Across Saurashtra</h3>
+                    <p data-lang="travelSection.description">
+                        Get instant cost estimates and compare all transport options (Bus, Train, Car, Flight) 
+                        between any two cities in Saurashtra. Make informed travel decisions with our smart calculator!
+                    </p>
+                    
+                    <div class="planner-features">
+                        <div class="feature-item">
+                            <i class="fas fa-calculator"></i>
+                            <span data-lang="travelSection.feature1">Cost Calculator</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bus"></i>
+                            <span data-lang="travelSection.feature2">Multiple Options</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock"></i>
+                            <span data-lang="travelSection.feature3">Travel Duration</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <span data-lang="travelSection.feature4">Travel Tips</span>
+                        </div>
+                    </div>
+
+                    <a href="travel-planner.html" target="_blank" class="btn btn-primary btn-large">
+                        <i class="fas fa-route"></i> <span data-lang="travelSection.openPlanner">Open Travel Planner</span>
+                    </a>
+                </div>
+
+                <div class="planner-preview">
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <span class="preview-badge" data-lang="travelSection.exampleRoute">Example Route</span>
+                        </div>
+                        <div class="preview-route">
+                            <div class="preview-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Rajkot</span>
+                            </div>
+                            <div class="preview-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>102 km</span>
+                            </div>
+                            <div class="preview-location">
+                                <i class="fas fa-map-pin"></i>
+                                <span>Junagadh</span>
+                            </div>
+                        </div>
+                        <div class="preview-options">
+                            <div class="preview-option">
+                                <span class="option-icon">🚗</span>
+                                <span class="option-name" data-lang="travelSection.car">Car</span>
+                                <span class="option-price">₹1,200</span>
+                            </div>
+                            <div class="preview-option">
+                                <span class="option-icon">🚌</span>
+                                <span class="option-name" data-lang="travelSection.bus">Bus</span>
+                                <span class="option-price">₹150</span>
+                            </div>
+                            <div class="preview-option">
+                                <span class="option-icon">🚂</span>
+                                <span class="option-name" data-lang="travelSection.train">Train</span>
+                                <span class="option-price">₹100</span>
+                            </div>
+                        </div>
+                        <div class="preview-footer">
+                            <small data-lang="travelSection.pricesNote">Prices per person • Click to see all routes</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 7: VIRTUAL TOUR
+       Embedded YouTube videos for a virtual experience.
+       ════════════════════════════════════════════ -->
+    <section class="virtual-tour-section" id="virtual-tour">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="virtualTour.tag">🎥 Virtual Experience</span>
+                <h2 class="section-title" data-lang="virtualTour.title">Virtual Tours</h2>
+                <p class="section-subtitle" data-lang="virtualTour.subtitle">Experience Saurashtra's wonders from your screen</p>
+            </div>
+
+            <div class="tour-grid">
+                <!-- Each tour card has an embedded YouTube video -->
+
+                <div class="tour-card">
+                    <div class="tour-thumbnail" onclick="openVideo('https://www.youtube.com/embed/LClaqWdBBv4')">
+                        <img src="https://img.youtube.com/vi/LClaqWdBBv4/hqdefault.jpg"
+                            alt="Somnath Temple Virtual Tour" loading="lazy" />
+                        <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+                    </div>
+                    <div class="tour-info">
+                        <h3>Somnath Temple</h3>
+                        <p>🏛️ One of the 12 sacred Jyotirlinga shrines</p>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-thumbnail" onclick="openVideo('https://www.youtube.com/embed/8Ih-KSLn1OE')">
+                        <img src="https://img.youtube.com/vi/8Ih-KSLn1OE/hqdefault.jpg" alt="Dwarka Temple Tour"
+                            loading="lazy" />
+                        <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+                    </div>
+                    <div class="tour-info">
+                        <h3>Dwarkadhish Temple</h3>
+                        <p>🔱 Ancient kingdom of Lord Krishna</p>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-thumbnail" onclick="openVideo('https://www.youtube.com/embed/NfdYA_ic5kA')">
+                        <img src="https://img.youtube.com/vi/NfdYA_ic5kA/hqdefault.jpg" alt="Gir National Park Tour"
+                            loading="lazy" />
+                        <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+                    </div>
+                    <div class="tour-info">
+                        <h3>Gir National Park</h3>
+                        <p>🦁 Home of the majestic Asiatic Lion</p>
+                    </div>
+                </div>
+
+                <div class="tour-card">
+                    <div class="tour-thumbnail" onclick="openVideo('https://www.youtube.com/embed/JgcGb010ej8')">
+                        <img src="https://img.youtube.com/vi/JgcGb010ej8/hqdefault.jpg" alt="Junagadh Tour"
+                            loading="lazy" />
+                        <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+                    </div>
+                    <div class="tour-info">
+                        <h3>Junagadh – City of History</h3>
+                        <p>🏔️ Uparkot Fort, Girnar Hill and more</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Modal (popup) - hidden by default -->
+        <div class="video-modal" id="videoModal" onclick="closeVideo()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeVideo()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <!-- YouTube video loads in this iframe -->
+                <iframe id="videoFrame" 
+                        src="" 
+                        frameborder="0" 
+                        allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 7: IMAGE GALLERY
+       A beautiful grid of photos from Saurashtra.
+       Images are loaded from Unsplash (free images).
+       ════════════════════════════════════════════ -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="gallery.tag">📸 Photo Gallery</span>
+                <h2 class="section-title" data-lang="gallery.title">Visual Heritage Archive</h2>
+                <p class="section-subtitle" data-lang="gallery.subtitle">A glimpse into the beauty of Saurashtra</p>
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery images are loaded by JavaScript from script.js -->
+            </div>
+        </div>
+
+        <!-- Lightbox: Full-screen image viewer -->
+        <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+            <button class="lightbox-close" onclick="closeLightbox()">
+                <i class="fas fa-times"></i>
+            </button>
+            <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+            <p class="lightbox-caption" id="lightboxCaption"></p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 8: DID YOU KNOW? – Cultural Facts
+       Fun and interesting facts about Saurashtra.
+       Displayed as colorful cards.
+       ════════════════════════════════════════════ -->
+    <section class="facts-section" id="facts">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="facts.tag">💡 Cultural Knowledge</span>
+                <h2 class="section-title" data-lang="facts.title">Did You Know?</h2>
+                <p class="section-subtitle" data-lang="facts.subtitle">Interesting facts about Saurashtra's culture & heritage</p>
+            </div>
+
+            <!-- Facts grid - filled by JavaScript -->
+            <div class="facts-grid" id="factsGrid">
+                <!-- JavaScript will insert fact cards here -->
+            </div>
+
+            <!-- Button to show a random new fact -->
+            <div class="facts-action">
+                <button class="btn btn-primary" onclick="showRandomFact()">
+                    <i class="fas fa-random"></i> <span data-lang="facts.showRandom">Show Random Fact</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 9: TOURIST GUIDE CARDS
+       Location-based tip cards for travelers.
+       ════════════════════════════════════════════ -->
+    <section class="guide-section" id="guide">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="guide.tag">🧭 Travel Guide</span>
+                <h2 class="section-title" data-lang="guide.title">Smart Tourist Guide</h2>
+                <p class="section-subtitle" data-lang="guide.subtitle">Everything you need to plan your perfect trip</p>
+            </div>
+
+            <div class="guide-grid">
+
+                <div class="guide-card">
+                    <div class="guide-icon" style="background: linear-gradient(135deg, #FF6B6B, #ee5a24);">
+                        🚂
+                    </div>
+                    <h3 data-lang="guide.howToReach">How to Reach</h3>
+                    <ul>
+                        <li><strong>Train:</strong> Rajkot, Junagadh, Jamnagar have major railway stations</li>
+                        <li><strong>Flight:</strong> Rajkot & Bhavnagar Airports have domestic flights</li>
+                        <li><strong>Road:</strong> NH-27 connects Saurashtra to Ahmedabad</li>
+                        <li><strong>Bus:</strong> GSRTC connects all 11 districts</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-icon" style="background: linear-gradient(135deg, #4ECDC4, #44a8a0);">
+                        🌤️
+                    </div>
+                    <h3 data-lang="guide.bestTime">Best Time to Visit</h3>
+                    <ul>
+                        <li><strong>Oct – Feb:</strong> Perfect weather, cool and pleasant ❄️</li>
+                        <li><strong>Mar – May:</strong> Warm, avoid midday travel ☀️</li>
+                        <li><strong>Jun – Sep:</strong> Monsoon, lush greenery 🌧️</li>
+                        <li><strong>Navratri:</strong> October – best festival experience 🎉</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-icon" style="background: linear-gradient(135deg, #A8E6CF, #3d9970);">
+                        🍽️
+                    </div>
+                    <h3 data-lang="guide.food">Must-Try Food</h3>
+                    <ul>
+                        <li>🥣 <strong>Khaman Dhokla</strong> – Soft steamed snack from Morbi</li>
+                        <li>🍪 <strong>Gathiya</strong> – Crispy Rajkot special</li>
+                        <li>🥛 <strong>Lassi & Shrikhand</strong> – Dairy delights</li>
+                        <li>🫓 <strong>Bajra Rotlo</strong> – Traditional village bread</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-icon" style="background: linear-gradient(135deg, #FFD93D, #f0932b);">
+                        💡
+                    </div>
+                    <h3 data-lang="guide.tips">Travel Tips</h3>
+                    <ul>
+                        <li>📋 Carry ID proof for wildlife sanctuaries</li>
+                        <li>👟 Wear comfortable shoes for fort climbing</li>
+                        <li>🌿 Respect nature and heritage sites</li>
+                        <li>💧 Carry water bottle – can get hot!</li>
+                        <li>📸 Ask permission before photographing people</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-icon" style="background: linear-gradient(135deg, #C9D6FF, #667eea);">
+                        🎭
+                    </div>
+                    <h3 data-lang="guide.festivals">Festivals to Experience</h3>
+                    <ul>
+                        <li>💃 <strong>Navratri:</strong> 9-night Garba dance festival</li>
+                        <li>🎆 <strong>Diwali:</strong> Festival of lights – October/November</li>
+                        <li>🌕 <strong>Mahasivratri:</strong> At Somnath & Girnar</li>
+                        <li>🎪 <strong>Tarnetar Fair:</strong> Surendranagar – tribal culture</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-icon" style="background: linear-gradient(135deg, #F8CDDA, #e84393);">
+                        🛍️
+                    </div>
+                    <h3 data-lang="guide.shopping">Local Shopping</h3>
+                    <ul>
+                        <li>🧶 <strong>Bandhani fabric</strong> – Tie-dye from Jamnagar</li>
+                        <li>🏺 <strong>Pottery & Tiles</strong> – Morbi is the tile capital</li>
+                        <li>🪔 <strong>Handicrafts</strong> – Rajkot bazaars</li>
+                        <li>🐚 <strong>Seashells & jewellery</strong> – Coastal towns</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 10: EDUCATIONAL SECTION
+       For students and researchers to learn about
+       the culture, history and digital preservation.
+       ════════════════════════════════════════════ -->
+    <section class="education-section" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="education.tag">📚 Learn & Research</span>
+                <h2 class="section-title" data-lang="education.title">Educational Hub</h2>
+                <p class="section-subtitle" data-lang="education.subtitle">For students, teachers and researchers</p>
+            </div>
+
+            <div class="education-grid">
+
+                <div class="edu-card">
+                    <div class="edu-icon">📜</div>
+                    <h3>History of Saurashtra</h3>
+                    <p>
+                        Saurashtra (also called Kathiawar Peninsula) has been home to the Indus Valley Civilization,
+                        Maurya Empire, and various Rajput dynasties. It has always been a melting pot of cultures.
+                    </p>
+                    <a href="education-details.html?topic=history" target="_blank" class="edu-link">
+                        Read More <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-icon">🎨</div>
+                    <h3>Art & Craft Traditions</h3>
+                    <p>
+                        Saurashtra is famous for Bandhani (tie-dye), Embroidery, Rogan Art, Pottery from Morbi,
+                        and intricate wood carvings. These crafts are passed down through generations.
+                    </p>
+                    <a href="education-details.html?topic=art-craft" target="_blank" class="edu-link">
+                        Explore Art <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-icon">🎵</div>
+                    <h3>Folk Music & Dance</h3>
+                    <p>
+                        Garba, Dandiya Raas, and Bhavai are traditional dance forms. Dayro (folk music sessions)
+                        and Bhajan singing are central to Saurashtra's cultural identity.
+                    </p>
+                    <a href="education-details.html?topic=music-dance" target="_blank" class="edu-link">
+                        Learn More <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-icon">🏛️</div>
+                    <h3>Digital Preservation</h3>
+                    <p>
+                        Smart Tourism uses technology like GPS mapping, 360° virtual tours, QR codes on monuments,
+                        and AI-powered chatbots to digitally preserve cultural heritage for future generations.
+                    </p>
+                    <a href="education-details.html?topic=digital-preservation" target="_blank" class="edu-link">
+                        Learn More <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-icon">🦁</div>
+                    <h3>Wildlife & Nature</h3>
+                    <p>
+                        Saurashtra is home to Gir National Park (Asiatic Lion), Marine National Park in Jamnagar,
+                        Blackbuck National Park in Bhavnagar, and flamingoes at Velavadar.
+                    </p>
+                    <a href="education-details.html?topic=wildlife" target="_blank" class="edu-link">
+                        Nature Guide <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-icon">👒</div>
+                    <h3>Famous Personalities</h3>
+                    <p>
+                        Porbandar gave the world Mahatma Gandhi. Jamnagar had Jam Ranji (cricket legend).
+                        Amreli is the birthplace of poet Kalapi. Many freedom fighters came from Saurashtra.
+                    </p>
+                    <a href="education-details.html?topic=personalities" target="_blank" class="edu-link">
+                        Learn More <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 11: CHATBOT / TOURISM ASSISTANT
+       Simple AI chatbot to answer tourism questions.
+       ════════════════════════════════════════════ -->
+    <section class="chatbot-section" id="chatbot">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="chatbot.tag">🤖 AI Assistant</span>
+                <h2 class="section-title" data-lang="chatbot.title">Tourism Chatbot</h2>
+                <p class="section-subtitle" data-lang="chatbot.subtitle">Ask anything about Saurashtra's heritage and tourism</p>
+            </div>
+
+            <div class="chatbot-wrapper">
+                <!-- Chat message display area -->
+                <div class="chat-window" id="chatWindow">
+                    <!-- Initial bot message -->
+                    <div class="chat-message bot-message">
+                        <span class="chat-avatar">🤖</span>
+                        <div class="chat-bubble">
+                            Namaste! 🙏 I am your Heritage Bharat guide. Ask me about temples, forts, wildlife,
+                            food, festivals or any district in Saurashtra!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick suggestion chips -->
+                <div class="quick-chips">
+                    <button class="chip" onclick="askBot('Tell me about Somnath')">⛩️ Somnath</button>
+                    <button class="chip" onclick="askBot('Tell me about Dwarka')">🔱 Dwarka</button>
+                    <button class="chip" onclick="askBot('Tell me about Gir')">🦁 Gir Lions</button>
+                    <button class="chip" onclick="askBot('Tell me about Rajkot')">🏙️ Rajkot</button>
+                    <button class="chip" onclick="askBot('best time to visit')">🌤️ Best Time</button>
+                    <button class="chip" onclick="askBot('local food')">🍽️ Food</button>
+                </div>
+
+                <!-- Input field and send button -->
+                <div class="chat-input-row">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Type your question..."
+                        onkeydown="if(event.key==='Enter') sendChat()" />
+                    <button class="chat-send-btn" onclick="sendChat()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       SECTION 12: CONTACT / FEEDBACK FORM
+       Users can submit their feedback or questions.
+       ════════════════════════════════════════════ -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-lang="contact.tag">📬 Get in Touch</span>
+                <h2 class="section-title" data-lang="contact.title">Contact & Feedback</h2>
+                <p class="section-subtitle" data-lang="contact.subtitle">We'd love to hear from you!</p>
+            </div>
+
+            <div class="contact-grid">
+
+                <!-- Contact info cards on the left -->
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Saurashtra, Gujarat, India</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📧</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>heritagebharat@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🌐</div>
+                        <div>
+                            <h4>Project</h4>
+                            <p>Hackathon 2026 – Smart Tourism</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🎓</div>
+                        <div>
+                            <h4>Category</h4>
+                            <p>Cultural Heritage & Technology</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback form on the right -->
+                <form class="contact-form" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label for="nameInput">Your Name *</label>
+                        <input type="text" id="nameInput" placeholder="Enter your name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="emailInput">Email Address *</label>
+                        <input type="email" id="emailInput" placeholder="Enter your email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="purposeInput">Purpose</label>
+                        <select id="purposeInput">
+                            <option value="">Select purpose...</option>
+                            <option value="tourist">Tourist Planning Visit</option>
+                            <option value="student">Student / Researcher</option>
+                            <option value="feedback">General Feedback</option>
+                            <option value="partner">Partnership Inquiry</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageInput">Message *</label>
+                        <textarea id="messageInput" rows="4"
+                            placeholder="Share your thoughts, suggestions or questions..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary submit-btn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                    <!-- Success message shown after form submission -->
+                    <div class="form-success" id="formSuccess" style="display:none;">
+                        <i class="fas fa-check-circle"></i> Thank you! Your message has been received. 🙏
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+       FOOTER: Bottom of the page
+       Shows credits, links and social icons.
+       ════════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">🏛️ Heritage Bharat</div>
+                <p>Digitally preserving the cultural heritage of Saurashtra, Gujarat for future generations.</p>
+                <div class="footer-social">
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#districts">Districts</a></li>
+                    <li><a href="#heritage">Heritage Places</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Districts</h4>
+                <ul>
+                    <li><a href="#districts">Rajkot</a></li>
+                    <li><a href="#districts">Junagadh</a></li>
+                    <li><a href="#districts">Jamnagar</a></li>
+                    <li><a href="#districts">Porbandar</a></li>
+                    <li><a href="#districts">Gir Somnath</a></li>
+                    <li><a href="#districts">Devbhumi Dwarka</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Project Info</h4>
+                <ul>
+                    <li>🏆 Hackathon 2026</li>
+                    <li>🎯 Smart Tourism</li>
+                    <li>🌐 HTML · CSS · JS</li>
+                    <li>📍 Gujarat, India</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                Made with ❤️ for Saurashtra &nbsp;|&nbsp; Heritage Bharat &nbsp;|&nbsp; Hackathon 2026 &nbsp;|&nbsp;
+                Gujarat, India
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (appears after scrolling down) -->
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()" title="Go to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Our JavaScript file comes LAST so HTML loads first -->
+    <script src="lang.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
